@@ -1,8 +1,10 @@
 package ptab.winfo2017;
 
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -11,10 +13,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
+import java.util.Calendar;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
     public static final String SETTINGS_FILE_PATH = "settings.txt";
+    private User user;
+    private WritableLocation location;
     private GoogleMap mMap;
+    private Calendar time = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +29,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         File file = new File(this.getFilesDir(), SETTINGS_FILE_PATH);
         if(!file.exists()) {
             //  direct to login
+            // pass user credentials to me --> set user & id
         }
 
         setContentView(R.layout.activity_main);
@@ -47,8 +54,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            LatLng locationMarker = new LatLng(location.getLatitude(), location.getLongitude());
+            time.getTimeInMillis();
+            mMap.addMarker(new MarkerOptions()
+                    .position(locationMarker));
+        }
+    };
 }
