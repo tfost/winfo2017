@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">WINFO2017</string>
+    <string name="app_name">SafeT</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_delete_this">Map</string>
+    <string name="title_activity_main">Map</string>
 </resources>
