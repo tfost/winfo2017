@@ -1,5 +1,5 @@
 package ptab.winfo2017;
-
+import com.google.android.gms.maps.model.LatLng;
 /**
  * Created by Tyler on 1/28/2017.
  */
@@ -10,27 +10,21 @@ package ptab.winfo2017;
  */
 public class WritableLocation {
 
-    private double lat;
-    private double lng;
+    private LatLng location;
     private long timeRecorded;
 
     /**
      * Creates a new WritableLocation from lattitude and longitude coordinates.
-     * @param lat the lattitude of the location
-     * @param lng the longitude of the location
+     * @param location the location to be stored
+     * @param timeRecorded the time the user was at this location.
      */
-    public WritableLocation(double lat, double lng, long timeRecorded) {
-        this.lat = lat;
-        this.lng = lng;
+    public WritableLocation(LatLng location, long timeRecorded) {
+        this.location = location;
         this.timeRecorded = timeRecorded;
     }
 
-    public double getLat() {
-        return this.lat;
-    }
-
-    public double getLng() {
-        return this.lng;
+    public LatLng getLocation() {
+        return this.location;
     }
 
     public long getTimeRecorded() {

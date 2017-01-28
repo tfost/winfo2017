@@ -4,6 +4,7 @@ package ptab.winfo2017;
  * Created by Tyler on 1/28/2017.
  */
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
@@ -23,8 +24,11 @@ public class DataSender {
         this.database = FirebaseDatabase.getInstance();
     }
 
+    /**
+     * Writes the current user information to the database!
+     */
     public void writeUser() {
-
+        DatabaseReference userRef = database.getReference("Users/" +user.getUserID());
     }
 
 }
