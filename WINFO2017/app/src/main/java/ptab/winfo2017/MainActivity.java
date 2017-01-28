@@ -1,5 +1,6 @@
 package ptab.winfo2017;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -22,7 +23,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         File file = new File(this.getFilesDir(), SETTINGS_FILE_PATH);
         if(!file.exists()) {
-            //  direct to login
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
 
         setContentView(R.layout.activity_main);
