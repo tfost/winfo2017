@@ -12,15 +12,17 @@ public class WritableLocation {
 
     private double lat;
     private double lng;
+    private long timeRecorded;
 
     /**
      * Creates a new WritableLocation from lattitude and longitude coordinates.
      * @param lat the lattitude of the location
      * @param lng the longitude of the location
      */
-    public WritableLocation(double lat, double lng) {
+    public WritableLocation(double lat, double lng, long timeRecorded) {
         this.lat = lat;
         this.lng = lng;
+        this.timeRecorded = timeRecorded;
     }
 
     public double getLat() {
@@ -29,6 +31,10 @@ public class WritableLocation {
 
     public double getLng() {
         return this.lng;
+    }
+
+    public long getTimeRecorded() {
+        return this.timeRecorded;
     }
 
 
