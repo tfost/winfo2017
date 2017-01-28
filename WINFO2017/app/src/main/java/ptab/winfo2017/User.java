@@ -4,6 +4,7 @@ package ptab.winfo2017;
  * Created by Tyler on 1/28/2017.
  */
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +13,13 @@ import java.util.List;
  */
 public class User {
 
-    public User() {}
+    public List<WritableLocation> locations;
+    public List<EmergencyContact> contacts;
+
+    public User() {
+        this.locations = new ArrayList<>();
+        //TODO: get user id from firebase database
+    }
 
     /**
      *
@@ -31,6 +38,10 @@ public class User {
     }
 
     public List<EmergencyContact> getEmergencyContacts() {
+        return null;
+    }
+
+    public List<WritableLocation> getLocations() {
         return null;
     }
 }
