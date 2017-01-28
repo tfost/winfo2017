@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class User {
 
+
     public User() {}
 
     /**
@@ -31,6 +32,10 @@ public class User {
     }
 
     public List<EmergencyContact> getEmergencyContacts() {
+        return null;
+    }
+
+    public List<WritableLocation> getLocations() {
         return null;
     }
 }
