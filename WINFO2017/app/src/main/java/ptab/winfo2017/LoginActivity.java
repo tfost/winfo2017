@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 LinearLayout root = new LinearLayout(this);
                 LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.contact_wrapper, root);
-                layout.setId(contacts.size());
+                layout.setId(contacts.size() - 1);
 
                 //  fill in slots
                 TextView displayName = (TextView) layout.findViewById(R.id.display_name);
@@ -123,14 +123,14 @@ public class LoginActivity extends AppCompatActivity {
                         contactHolder.removeView(contactHolder.findViewById(id));
 
                         //  update other lines
-                        for(int i = id + 1; i < contacts.size() - 1; i++) {
+                        for(int i = id + 1; i < contacts.size(); i++) {
                             LinearLayout layout = (LinearLayout) contactHolder.findViewById(i);
                             layout.setId(i - 1);
 
                             Button delete = (Button) layout.findViewById(i);
                             delete.setId(i - 1);
                         }
-                        contacts.remove(id - 1);
+                        contacts.remove(id);
                     }
                 });
 
@@ -142,9 +142,18 @@ public class LoginActivity extends AppCompatActivity {
         Button done = (Button) findViewById(R.id.submit_button);
         done.setOnClickListener(new View.OnClickListener () {
             public void onClick(View view) {
-                createFile(" ", "settings", view.getContext());
+                createFile(name + printContacts(), "settings.txt", view.getContext());
+                finish();
             }
         });
+    }
+
+    public String printContacts() {
+        String result = "";
+        for(Contact contact : contacts) {
+            result += "\n" + contact;
+        }
+        return result;
     }
 
     //  creates a file with a given starting content. If the file exists, it is left alone.

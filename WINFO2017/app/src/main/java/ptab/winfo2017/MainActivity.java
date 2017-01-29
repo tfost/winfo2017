@@ -30,11 +30,16 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
 
 import android.location.LocationListener;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 
 import java.io.File;
 import java.util.Calendar;
+
+import static ptab.winfo2017.R.id.textView;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     public static final String SETTINGS_FILE_PATH = "settings.txt";
@@ -48,7 +53,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private String tag = "MainActivity";
     private LocationManager locationManager;
     private static final int MY_PERMISSIONS_REQUEST = 1;
-    private boolean shouldTrack;
+    private boolean isBeingTouched = false;
 
     public void onConnectionFailed(ConnectionResult result) {
         Log.d(tag, "Failed");
@@ -72,7 +77,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, mLocationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
+        Log.d(tag, "Network provider");
 //        if (locationManager != null) {
 //            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 //                    || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -94,6 +100,26 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        final Button button = (Button) findViewById(R.id.start_track);
+        button.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    Log.d("MainActivity","touched");
+                    isBeingTouched = true;
+                }
+                if(event.getAction() == MotionEvent.ACTION_UP){
+                    Log.d("MainActivity","untouched");
+                    isBeingTouched = false;
+                }
+
+                return true;
+            }
+
+        });
+
     }
 
     protected void onStart() {
@@ -113,22 +139,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void onConnected(Bundle connectionHint) {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-            //Toast.makeText(this, "First enable LOCATION ACCESS in settings.", Toast.LENGTH_LONG).show();
-            //return;
 
             // Attempt to request permission
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST);
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 1, mLocationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 5, mLocationListener);
         Location locationMarker = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Log.d(tag, "GPS provider");
 
 
     }
@@ -158,7 +175,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                   android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
@@ -175,7 +192,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
     }
-
 
     private final LocationListener mLocationListener = new LocationListener() {
 
@@ -194,9 +210,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng locationMarker = new LatLng(latitude, longitude);
             if (prev != null) {
                 Polyline line = mMap.addPolyline(new PolylineOptions()
-                .add(prev, locationMarker)
-                .width(5)
-                .color(Color.RED));
+                        .add(prev, locationMarker)
+                        .width(5)
+                        .color(Color.RED));
                 if (last != null) {
                     last.visible(false);
                 }
@@ -204,11 +220,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             prev = locationMarker;
             long getTime = time.getTimeInMillis();
             Log.d(tag, "Time: " + getTime);
+            if (isBeingTouched) {
+                if (mMap != null) {
+                    last = new MarkerOptions().position(locationMarker);
+                    mMap.addMarker(last);
 
-            if (mMap != null) {
-                last = new MarkerOptions().position(locationMarker);
-                mMap.addMarker(last);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(locationMarker));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(locationMarker));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationMarker, 18));
+                }
             }
 
 

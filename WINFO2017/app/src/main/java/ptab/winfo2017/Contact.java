@@ -15,4 +15,8 @@ public class Contact {
         this.name = name;
         this.number = number;
     }
+
+    public String toString() {
+        return name + " " + number;
+    }
 }
