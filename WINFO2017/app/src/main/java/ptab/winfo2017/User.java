@@ -12,9 +12,9 @@ import java.util.List;
  * Contact information, list of previously visited locations, etc.
  */
 public class User {
-
+    public String name;
     public List<WritableLocation> locations;
-    public List<EmergencyContact> contacts;
+    public List<Contact> contacts;
 
     public User() {
         this.locations = new ArrayList<>();
@@ -26,7 +26,7 @@ public class User {
      * @return the user's name
      */
     public String getName() {
-        return "";
+        return name;
     }
 
     /**
@@ -37,7 +37,7 @@ public class User {
         return -1;
     }
 
-    public List<EmergencyContact> getEmergencyContacts() {
+    public List<Contact> getEmergencyContacts() {
         return null;
     }
 
