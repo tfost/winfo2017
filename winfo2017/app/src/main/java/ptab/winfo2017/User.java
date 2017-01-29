@@ -12,12 +12,10 @@ import java.util.List;
  * Contact information, list of previously visited locations, etc.
  */
 public class User {
-
-    private List<WritableLocation> locations;
-    private List<EmergencyContact> contacts;
+    public String name;
+    public List<WritableLocation> locations;
+    public List<Contact> contacts;
     private int id;
-    private String name;
-
 
     public User(String name) {
         this.locations = new ArrayList<>();
@@ -46,7 +44,7 @@ public class User {
         this.id = id;
     }
 
-    public List<EmergencyContact> getEmergencyContacts() {
+    public List<Contact> getEmergencyContacts() {
         return this.contacts;
     }
 

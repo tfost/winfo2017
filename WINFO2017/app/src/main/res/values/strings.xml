@@ -8,4 +8,5 @@
     <string name="name_prompt">Hi, What is your name?</string>
     <string name="name_hint">Name</string>
     <string name="continue_button">Continue</string>
+    <string name="title_activity_contact_list">ContactList</string>
 </resources>
