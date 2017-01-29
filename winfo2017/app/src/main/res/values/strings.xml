@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SafeT</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_delete_this">Map</string>
+    <string name="title_activity_main">Map</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="name_prompt">Hi, What is your name?</string>
+    <string name="name_hint">Name</string>
+    <string name="continue_button">Continue</string>
+</resources>

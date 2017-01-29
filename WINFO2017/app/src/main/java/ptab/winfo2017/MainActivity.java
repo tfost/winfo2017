@@ -10,16 +10,28 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
     public static final String SETTINGS_FILE_PATH = "settings.txt";
     private GoogleMap mMap;
+    private FirebaseDatabase database;
+    private DataSender sender;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        database = FirebaseDatabase.getInstance();
+        user = new User("testuser");
+        user.getLocations().add(new WritableLocation(new LatLng(100, 100), 100000));
+        sender = new DataSender(user, database);
+        sender.setUserNextId();
+
 
         File file = new File(this.getFilesDir(), SETTINGS_FILE_PATH);
         if(!file.exists()) {
@@ -47,7 +59,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));

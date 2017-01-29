@@ -13,12 +13,17 @@ import java.util.List;
  */
 public class User {
 
-    public List<WritableLocation> locations;
-    public List<EmergencyContact> contacts;
+    private List<WritableLocation> locations;
+    private List<EmergencyContact> contacts;
+    private int id;
+    private String name;
 
-    public User() {
+
+    public User(String name) {
         this.locations = new ArrayList<>();
-        //TODO: get user id from firebase database
+        this.contacts = new ArrayList<>();
+        this.name = name;
+        this.id = -1;
     }
 
     /**
@@ -26,7 +31,7 @@ public class User {
      * @return the user's name
      */
     public String getName() {
-        return "";
+        return name;
     }
 
     /**
@@ -34,14 +39,18 @@ public class User {
      * @return an integer representation of this user.
      */
     public int getUserID() {
-        return -1;
+        return this.id;
+    }
+
+    public void setUserId(int id) {
+        this.id = id;
     }
 
     public List<EmergencyContact> getEmergencyContacts() {
-        return null;
+        return this.contacts;
     }
 
     public List<WritableLocation> getLocations() {
-        return null;
+        return this.locations;
     }
 }
