@@ -218,13 +218,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
             prev = locationMarker;
-            long getTime = time.getTimeInMillis();
-            Log.d(tag, "Time: " + getTime);
+            Log.d(tag, "Time: " + System.currentTimeMillis());
             if (isBeingTouched) {
                 if (mMap != null) {
                     last = new MarkerOptions().position(locationMarker);
                     mMap.addMarker(last);
-
+                    user.getLocations().add(new WritableLocation(locationMarker, System.currentTimeMillis()));
+                    sender.writeUser();
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(locationMarker));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationMarker, 18));
                 }
