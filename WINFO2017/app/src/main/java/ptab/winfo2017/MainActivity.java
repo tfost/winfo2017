@@ -1,10 +1,13 @@
 package ptab.winfo2017;
 
+
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
+
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,9 +51,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         File file = new File(this.getFilesDir(), SETTINGS_FILE_PATH);
-        if (!file.exists()) {
-            //  direct to login
-            // pass user credentials to me --> set user & id
+        if(!file.exists()) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, mLocationListener);
 //        if (locationManager != null) {
@@ -67,7 +70,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     .addApi(LocationServices.API)
                     .build();
         }
-
 
         setContentView(R.layout.activity_main);
 
