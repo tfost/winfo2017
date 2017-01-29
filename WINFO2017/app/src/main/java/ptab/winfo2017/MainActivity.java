@@ -3,6 +3,7 @@ package ptab.winfo2017;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
@@ -21,7 +22,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -39,12 +43,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private FirebaseDatabase database;
     private DataSender sender;
-    private User user;
     private Calendar time = Calendar.getInstance();
     private GoogleApiClient mGoogleApiClient;
     private String tag = "MainActivity";
     private LocationManager locationManager;
     private static final int MY_PERMISSIONS_REQUEST = 1;
+    private boolean shouldTrack;
 
     public void onConnectionFailed(ConnectionResult result) {
         Log.d(tag, "Failed");
@@ -53,6 +57,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         database = FirebaseDatabase.getInstance();
@@ -171,30 +176,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode,
-//                                           String permissions[], int[] grantResults) {
-//        switch (requestCode) {
-//            case MY_PERMISSIONS_REQUEST: {
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0
-//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//
-//                    // permission was granted, yay! Do the
-//                    // contacts-related task you need to do.
-//
-//                } else {
-//
-//                    // permission denied, boo! Disable the
-//                    // functionality that depends on this permission.
-//                }
-//                return;
-//            }
-//
-//            // other 'case' lines to check for other
-//            // permissions this app might request
-//        }
-//    }
 
     private final LocationListener mLocationListener = new LocationListener() {
 
@@ -203,17 +184,30 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         public void onProviderEnabled(String provider) {}
 
         public void onProviderDisabled(String provider) {}
-
+        public LatLng prev = null;
+        public MarkerOptions last = null;
         @Override
         public void onLocationChanged(Location location) {
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
             Log.d(tag, "Latitude: " + latitude + ", Longitude: " + longitude);
             LatLng locationMarker = new LatLng(latitude, longitude);
+            if (prev != null) {
+                Polyline line = mMap.addPolyline(new PolylineOptions()
+                .add(prev, locationMarker)
+                .width(5)
+                .color(Color.RED));
+                if (last != null) {
+                    last.visible(false);
+                }
+            }
+            prev = locationMarker;
             long getTime = time.getTimeInMillis();
             Log.d(tag, "Time: " + getTime);
+
             if (mMap != null) {
-                mMap.addMarker(new MarkerOptions().position(locationMarker));
+                last = new MarkerOptions().position(locationMarker);
+                mMap.addMarker(last);
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(locationMarker));
             }
 
